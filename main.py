@@ -1,46 +1,31 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers.utils import logging
+import torch
+from huggingface_hub import login
+# AutoModelForCausakLM est une classe permettant de charger un LLM
+# AutoTokenizer est une classe permetant de convertir du texte en tokens (format compréhensible
+# par le modèle
+import torch
+print(torch.cuda.is_available())  # Doit afficher True
+print(torch.cuda.device_count())  # Doit afficher un nombre > 0 si un GPU est détecté
 
-def main():
-    model_name = "mistralai/mistral-7b"  # Nom du modèle
+login("")
+model_name = "mistralai/Mistral-7B-v0.1" #nom du modèle à charger (huggingface)
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype="auto")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+# Le tokenizer est responsable de la conversion du texte en tokens (nombres) et inversement.
 
-    # Charger le tokenizer et le modèle
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map=None  # Désactiver la gestion automatique des GPU
-    )
-    model = model.to("cpu")  # Forcer le modèle à s'exécuter sur CPU
+logging.get_logger("transformers").setLevel(logging.INFO)
+# Configuration du niveau de log pour afficher les messages d'information liés aux transformers
 
-    # Exemple d'entrée utilisateur
-    prompt = "Bonjour, peux-tu m'expliquer la théorie de la relativité ?"
-    inputs = tokenizer(prompt, return_tensors="pt")
-    outputs = model.generate(inputs.input_ids, max_length=100)
+input_text = "Pourquoi la quantification est-elle importante pour les LLM ?"
+# text d'entrée pour le modèle
 
-    # Afficher la réponse générée
-    print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+inputs = tokenizer(input_text, return_tensors="pt").to("cuda")
 
-if __name__ == "__main__":
-    main()
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-def main():
-    model_name = "mistralai/mistral-7b"  # Nom du modèle
-
-    # Charger le tokenizer et le modèle
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map=None  # Désactiver la gestion automatique des GPU
-    )
-    model = model.to("cpu")  # Forcer le modèle à s'exécuter sur CPU
-
-    # Exemple d'entrée utilisateur
-    prompt = "Bonjour, peux-tu m'expliquer la théorie de la relativité ?"
-    inputs = tokenizer(prompt, return_tensors="pt")
-    outputs = model.generate(inputs.input_ids, max_length=100)
-
-    # Afficher la réponse générée
-    print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-
-if __name__ == "__main__":
-    main()
+with torch.no_grad():
+# Désactivation du calcul des gradients pour économiser de la mémoire et accélérer l'inférence
+    output = model.generate(**inputs, max_length=100)
+    # Génération de texte par le modèle avec une limite de 100 tokenss
+print(tokenizer.decode(output[0], skip_special_tokens=True))
+# Décodage du texte généré en supprimant les tokens spéciaux

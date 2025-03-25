@@ -1,11 +1,19 @@
-version: "3.9"
+
+
 services:
   mistral:
     build:
       context: .
-      dockerfile: dockerfile
-    container_name: mistral_container
+      dockerfile: Dockerfile
+    container_name: intelligent_environment_mistral_container
     volumes:
-      - .:/inteligentEnvironment-
-    working_dir: /inteligentEnvironment-
+      - .:/inteligentEnvironment
+    working_dir: /inteligentEnvironment
     command: python3 main.py
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

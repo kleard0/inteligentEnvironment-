@@ -1,0 +1,15 @@
+name : intelligentEnvironment
+dependencies:
+  - python=3.10
+  - tensorflow
+  - streamlit
+  - pandas
+  - safetensors
+  - pip
+  - pip:
+      - transformers
+      - torch
+      - bitsandbytes
+      - accelerate
+      - streamlit
+      - plotly

@@ -8,10 +8,9 @@ RUN apt-get update && apt-get install -y python3-pip
 RUN pip3 install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 # Désactiver CUDA pour éviter toute recherche GPU
-ENV CUDA_VISIBLE_DEVICES=-1
 
 # Définir le répertoire de travail
-WORKDIR /inteligentEnvironment-
+WORKDIR /inteligentEnvironment
 
 # Copier tous les fichiers du projet dans le conteneur
 COPY . .
