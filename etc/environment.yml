@@ -13,3 +13,6 @@ dependencies:
       - accelerate
       - streamlit
       - plotly
+      - yaml
+      - auto-gptq
+

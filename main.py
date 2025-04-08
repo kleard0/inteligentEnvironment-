@@ -1,31 +1,58 @@
+import config_loader
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers.utils import logging
-import torch
 from huggingface_hub import login
-# AutoModelForCausakLM est une classe permettant de charger un LLM
-# AutoTokenizer est une classe permetant de convertir du texte en tokens (format compréhensible
-# par le modèle
-import torch
-print(torch.cuda.is_available())  # Doit afficher True
-print(torch.cuda.device_count())  # Doit afficher un nombre > 0 si un GPU est détecté
+from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
 
-login("")
-model_name = "mistralai/Mistral-7B-v0.1" #nom du modèle à charger (huggingface)
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype="auto")
+# ✅ Vérifier que le GPU est bien utilisé
+print("GPU Disponible:", torch.cuda.is_available())  
+print("Nombre de GPUs:", torch.cuda.device_count())  
+
+# ✅ Charger la config et se connecter à Hugging Face
+CONFIG_PATH = "etc/config.yml"
+config = config_loader.load_config(CONFIG_PATH)
+login_token = config.get("HF_token", "")
+
+if not login_token:
+    raise ValueError("Le token de login est manquant dans le fichier de configuration.")
+login(login_token)
+
+# ✅ Charger le modèle original (avant quantization)
+model_name = "mistralai/Mistral-7B-v0.1"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-# Le tokenizer est responsable de la conversion du texte en tokens (nombres) et inversement.
 
-logging.get_logger("transformers").setLevel(logging.INFO)
-# Configuration du niveau de log pour afficher les messages d'information liés aux transformers
+# Charger en FP16 pour économiser de la mémoire
+model = AutoModelForCausalLM.from_pretrained(
+    model_name, # ✅ FP16 pour éviter de saturer la VRAM
+    device_map="auto"
+)
 
+# ✅ Texte d’entrée
 input_text = "Pourquoi la quantification est-elle importante pour les LLM ?"
-# text d'entrée pour le modèle
-
 inputs = tokenizer(input_text, return_tensors="pt").to("cuda")
 
-with torch.no_grad():
-# Désactivation du calcul des gradients pour économiser de la mémoire et accélérer l'inférence
+# ✅ Configuration de la quantization
+#quant_config = BaseQuantizeConfig(
+#    bits=8,            # 🔹 Essaie 16, 12, 10, 8, 6, 4 bits
+#    group_size=128,    # 🔹 Taille de groupe (128 recommandé)
+#    desc_act=False     # 🔹 Garde les activations en FP16/FP32 pour éviter de perdre trop en qualité
+#)
+#
+# ✅ Quantifier le modèle
+#quantized_model_dir = "./mistral_gptq_quantized"
+#
+#quantized_model = AutoGPTQForCausalLM.from_pretrained(
+#    model_name, 
+#    quantize_config=quant_config, 
+#    device="cuda"
+#)
+
+#quantized_model.quantize_model()  # ⚠️ Étape obligatoire pour exécuter la quantization
+#quantized_model.save_quantized(quantized_model_dir)  # Sauvegarde du modèle quantifié
+
+# ✅ Test d'inférence après quantization
+with torch.no_grad():  
     output = model.generate(**inputs, max_length=100)
-    # Génération de texte par le modèle avec une limite de 100 tokenss
-print(tokenizer.decode(output[0], skip_special_tokens=True))
-# Décodage du texte généré en supprimant les tokens spéciaux
+
+# ✅ Affichage du texte généré
+print("Texte généré :", tokenizer.decode(output[0], skip_special_tokens=True))

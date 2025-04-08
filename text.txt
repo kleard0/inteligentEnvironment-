@@ -1,0 +1,5 @@
+input_reference : 
+Pourquoi la quantification est-elle importante pour les LLM ?
+
+output_reference : 
+La quantification est importante pour les LLM car elle permet de mesurer et d'évaluer la performance des modèles de langage. En mesurant la performance des modèles, les chercheurs et les développeurs peuvent identifier les points forts et les points faibles des modèles et améliorer leur performance en fonction des résultats.
