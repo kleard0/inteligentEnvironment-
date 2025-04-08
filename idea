@@ -1,0 +1,4 @@
+Idée pour alléger la config du llm 
+
+- desactivation calcul des gradients
+- quantization
