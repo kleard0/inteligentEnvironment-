@@ -5,3 +5,18 @@ output_reference :
 La quantification est importante pour les LLM car elle permet de mesurer et d'évaluer la performance des modèles de langage. 
 En mesurant la performance des modèles, les chercheurs et les développeurs peuvent identifier les points forts et les points 
 faibles des modèles et améliorer leur performance en fonction des résultats.
+
+gptq - 8 bit 
+Réponse avec le modèle quantifié GPTQ 8 bits :
+Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
+Pourquoi la quantification est-elle importante pour les LLM ?SEDheimheimogg 
+generic betaasiusheraggioraiesi EstatefonokootteRMower flagheimzung hameltaikurite
+ halÔipediaaster pos Lab releablierzchioalo DiviDarinralermanshallands Worldersonbum
+  domwart residencealthundenith Glasund M obst kin Daktober LarsuschittaghPCM
+   registeredolutrix vent pressvikanner dialect briefly Fraheimer 
+   Sonpuliffeokuao Display pacnte whist
+
+gptq - 4bit 
+idle prevwidetishi�enoarinriaitelieroezahanianiLIEDawnglich /******/pit sinkastroottenog Mass postsigerrepuctEYchs 
+hiddenuso viciatorootedineaoro aquedi /******/pte collyna violasc Bent lapassenostiindeaco /******/ /******/oylerc marginal
+ informW perhaps car BronanimBL CopyCopy futrab shadow dec mil registeracci throatoderoesaignahazin grenгреerenalsodachell

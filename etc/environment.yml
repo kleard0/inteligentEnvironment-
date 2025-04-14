@@ -15,4 +15,5 @@ dependencies:
       - plotly
       - yaml
       - auto-gptq
+      - optimum
 
