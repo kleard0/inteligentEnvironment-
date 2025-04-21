@@ -1,1 +1,3 @@
-HF_token : <tokenHuggingFace>
+OLLAMA_URL : "http://localhost:11434/api/generate"
+PROMPT : "En une à deux phrase, explique pourquoi la quantification est-elle importante pour les LLM ?"
+MODEL_NAME : "mistral:7b"

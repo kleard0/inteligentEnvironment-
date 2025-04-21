@@ -16,4 +16,5 @@ dependencies:
       - yaml
       - auto-gptq
       - optimum
+      - request
 
