@@ -9,12 +9,10 @@ dependencies:
   - pip:
       - transformers
       - torch
-      - bitsandbytes
-      - accelerate
-      - streamlit
       - plotly
+      - bert_score
       - yaml
-      - auto-gptq
-      - optimum
       - request
+      - nltk
+      - evaluate
 
